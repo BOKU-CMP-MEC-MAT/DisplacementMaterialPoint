@@ -154,9 +154,9 @@ namespace Marmot::MaterialPoints {
         displacement[i] = state->u( i );
     };
 
-    double getDensity() const { return _density; };
+    double getDensityUndeformed() const { return _density; };
 
-    const TensorD& coordinates() const { return _x0; };
+    const TensorD& getCoordinatesUndeformed() const { return _x0; };
 
     virtual void prepareYourself( double timeNew, double dT );
 
@@ -174,13 +174,6 @@ namespace Marmot::MaterialPoints {
 
       mapEigenToFastor( state->u )     = mapEigenToFastor( u_np );
       mapEigenToFastor( state->dY_dX ) = mapEigenToFastor( dx_dX_np );
-
-      // TODO: decice whether to keep this
-
-      /* state->du.zeros(); */
-      /* state->dw.zeros(); */
-      /* state->dx_dY.eye(); */
-      /* state->dw_dY.zeros(); */
     };
 
     virtual void incrementDeformation( const TensorD&  displacementIncrement,
@@ -194,9 +187,25 @@ namespace Marmot::MaterialPoints {
       Fastor::Tensor< double, nDim, nDim, nDim, nDim > dS_dDeltaF;
     } tangents;
 
-    const TensorDD dx_dY() const { return state->dx_dY( Fastor::seq( 0, nDim ), Fastor::seq( 0, nDim ) ); };
+    TensorDD dx_dY() const { return state->dx_dY( Fastor::seq( 0, nDim ), Fastor::seq( 0, nDim ) ); };
 
-    const TensorDD dY_dX() const { return state->dY_dX( Fastor::seq( 0, nDim ), Fastor::seq( 0, nDim ) ); };
+    TensorDD dY_dX() const { return state->dY_dX( Fastor::seq( 0, nDim ), Fastor::seq( 0, nDim ) ); };
+
+    TensorD getVelocity() const { return state->v( Fastor::seq( 0, nDim ) ); };
+
+    TensorD getAcceleration() const { return state->a( Fastor::seq( 0, nDim ) ); };
+
+    void setVelocity( const TensorD& velocity )
+    {
+      for ( int i = 0; i < nDim; i++ )
+        state->v( i ) = velocity( i );
+    };
+
+    void setAcceleration( const TensorD& acceleration )
+    {
+      for ( int i = 0; i < nDim; i++ )
+        state->a( i ) = acceleration( i );
+    };
   };
 
   template < int nDim >
