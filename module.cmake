@@ -3,7 +3,7 @@ set(MODULE_NAME
 
 set(MODULES_DEPENDENCIES
     MarmotMechanicsCore
-    MarmotMPMCore
+    MarmotMeshfreeCore
     )
 
 set(DEPENDECIES_FULLFILLED TRUE)
