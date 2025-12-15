@@ -206,6 +206,8 @@ namespace Marmot::MaterialPoints {
       for ( int i = 0; i < nDim; i++ )
         state->a( i ) = acceleration( i );
     };
+
+    virtual void setInitialCondition( const std::string& conditionName, const double* value ) override{};
   };
 
   template < int nDim >
